@@ -36,7 +36,7 @@ export type CorrectionRun = {
 	created_at: string;
 };
 
-export type CorrectionItems = {
+export type CorrectionItemType = {
 	id: string;
 	correction_run_id: string;
 	category: string;
@@ -58,4 +58,3 @@ export type Tag = {
 	user_id: string;
 	name: string;
 };
-
