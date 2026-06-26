@@ -1,9 +1,9 @@
 import React from 'react';
-import { CorrectionItemType } from '../lib/supabase';
+import { CorrectionDetail, CorrectionItemType } from '../lib/supabase';
 
-function CorrectionItem({ item }: { item: CorrectionItemType }) {
+function CorrectionItem({ item }: { item: CorrectionItemType | CorrectionDetail }) {
 	return (
-		<div key={item.id}>
+		<div>
 			<p>{item.original}</p>
 			<p>{item.corrected}</p>
 			<p>{item.explanation}</p>

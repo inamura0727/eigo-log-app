@@ -1,11 +1,11 @@
 'use client';
 import React, { useState } from 'react';
-import { CorrectionItemType } from '../lib/supabase';
+import { CorrectionDetail, CorrectionItemType } from '../lib/supabase';
 import CorrectionItem from './correctionItem';
 
 type Props = {
 	title: string;
-	result: CorrectionItemType[];
+	result: CorrectionItemType[] | CorrectionDetail[];
 };
 
 function CorrectionSection({ title, result }: Props) {
@@ -34,8 +34,8 @@ function CorrectionSection({ title, result }: Props) {
 			{isOpen && (
 				<section>
 					<ul className="list-disc space-y-3 pl-6">
-						{result.map((item) => (
-							<li key={item.id}>
+						{result.map((item, i) => (
+							<li key={i}>
 								<CorrectionItem item={item} />
 							</li>
 						))}

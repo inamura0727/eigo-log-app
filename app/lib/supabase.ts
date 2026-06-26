@@ -58,3 +58,18 @@ export type Tag = {
 	user_id: string;
 	name: string;
 };
+
+export type CorrectionDetail = {
+	original: string;
+	corrected: string;
+	explanation: string;
+};
+
+export type CorrectionResult = {
+	originalText: string;
+	correctedEnglish: string;
+	betterVocabulary: CorrectionDetail[];
+	usefulExpressions: CorrectionDetail[];
+	grammar: CorrectionDetail[];
+	questions: string[];
+};

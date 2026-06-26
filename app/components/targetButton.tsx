@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { Text } from '../constants/text';
 
 type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
 
