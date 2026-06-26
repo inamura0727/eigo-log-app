@@ -36,7 +36,7 @@ export type CorrectionRun = {
 	created_at: string;
 };
 
-export type CorrectionItems = {
+export type CorrectionItemType = {
 	id: string;
 	correction_run_id: string;
 	category: string;
@@ -59,3 +59,17 @@ export type Tag = {
 	name: string;
 };
 
+export type CorrectionDetail = {
+	original: string;
+	corrected: string;
+	explanation: string;
+};
+
+export type CorrectionResult = {
+	originalText: string;
+	correctedEnglish: string;
+	betterVocabulary: CorrectionDetail[];
+	usefulExpressions: CorrectionDetail[];
+	grammar: CorrectionDetail[];
+	questions: string[];
+};
