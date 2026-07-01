@@ -2,7 +2,9 @@
 import React, { useState } from 'react';
 import { Text } from '@/app/constants/text';
 import CorrectionSection from '@/app/components/correctionSection';
-import { CorrectionResult } from '@/app/lib/supabase';
+import { CorrectionResult } from '@/app/lib/type';
+import Button from '@/app/components/button';
+import axios from 'axios';
 
 function ReviewPage() {
 	const [result] = useState<CorrectionResult>(() => {
@@ -13,15 +15,14 @@ function ReviewPage() {
 		}
 
 		const parsedSavedResult = JSON.parse(savedResult);
+		const CorrectionData = JSON.parse(parsedSavedResult.result);
 
-		return JSON.parse(parsedSavedResult.result);
+		return { ...CorrectionData, entry_id: parsedSavedResult.entry_id };
 	});
 
 	if (!result) {
 		return <p>結果がありません。</p>;
 	}
-
-	console.log(result);
 
 	const originalText = result.originalText;
 	const correctedEnglish = result.correctedEnglish;
@@ -29,6 +30,22 @@ function ReviewPage() {
 	const usefulExpressions = result.usefulExpressions;
 	const grammar = result.grammar;
 	const questions = result.questions;
+
+	const handleSaveReview = async () => {
+		try {
+			const res = await axios.post('api/review', {
+				entry_id: result.entry_id,
+				originalText: originalText,
+				correctedEnglish: correctedEnglish,
+				betterVocabulary: betterVocabulary,
+				usefulExpressions: usefulExpressions,
+				grammar: grammar,
+				questions: questions,
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	return (
 		<div>
@@ -48,6 +65,14 @@ function ReviewPage() {
 				<CorrectionSection title={Text.Category.VOCABURALY} result={betterVocabulary} />
 				<CorrectionSection title={Text.Category.EXPRESSION} result={usefulExpressions} />
 				<CorrectionSection title={Text.Category.GARMMAR} result={grammar} />
+			</div>
+			<div className="flex justify-end">
+				<Button
+					colour="#fff"
+					textColour="#3c3c3c"
+					text="Save Review"
+					onClick={handleSaveReview}
+				/>
 			</div>
 		</div>
 	);
