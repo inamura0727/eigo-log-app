@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { CorrectionDetail, CorrectionItemType } from '../lib/supabase';
+import { CorrectionDetail, CorrectionItemType } from '../lib/type';
 import CorrectionItem from './correctionItem';
 
 type Props = {

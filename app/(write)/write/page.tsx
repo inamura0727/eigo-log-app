@@ -6,34 +6,46 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+type saveWritingEntryResponse = {
+	entry_id: string;
+};
+
 function Write() {
 	const [inputText, setInputText] = useState<string>('');
 	const [targetLevel, setTargetLevel] = useState<CefrLevel>('B1');
 	const [writingEntryId, setWritingEntryId] = useState<string>('');
 	const router = useRouter();
 
-	const handleSaveText = async () => {
+	const saveWritingEntry = async (): Promise<saveWritingEntryResponse | null> => {
 		if (inputText.trim().length <= 0) {
 			console.log('Please enter more characters.');
-			return;
+			return null;
 		}
+
+		const res = await axios.post('/api/write', {
+			id: writingEntryId,
+			original_text: inputText,
+			target: targetLevel,
+		});
+		if (res.data.id) {
+			setWritingEntryId(res.data.id);
+		}
+		return { entry_id: res.data.id };
+	};
+
+	const handleSaveText = async () => {
 		try {
-			const res = await axios.post('/api/write', {
-				id: writingEntryId,
-				original_text: inputText,
-				target: targetLevel,
-			});
-			console.log(res.data);
-			if (res.data.id) {
-				setWritingEntryId(res.data.id);
-			}
+			await saveWritingEntry();
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
-	const handleTest = async () => {
+	const handlePostOpenai = async () => {
 		try {
+			const saveEntry = await saveWritingEntry();
+			if (!saveEntry) return;
+
 			const res = await fetch('/api/write/openai', {
 				method: 'POST',
 				headers: {
@@ -50,9 +62,9 @@ function Write() {
 			}
 
 			const data = await res.json();
-			console.log(data);
 
-			sessionStorage.setItem('correctionResult', JSON.stringify(data));
+			const reviewData = { ...data, entry_id: saveEntry.entry_id };
+			sessionStorage.setItem('correctionResult', JSON.stringify(reviewData));
 
 			router.push('/review/');
 		} catch (error) {
@@ -83,7 +95,7 @@ function Write() {
 					colour="#2D8FC8"
 					textColour="#fff"
 					text="Review my diary"
-					onClick={handleTest}
+					onClick={handlePostOpenai}
 				/>
 			</div>
 		</div>

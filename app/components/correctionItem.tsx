@@ -1,5 +1,5 @@
 import React from 'react';
-import { CorrectionDetail, CorrectionItemType } from '../lib/supabase';
+import { CorrectionDetail, CorrectionItemType } from '../lib/type';
 
 function CorrectionItem({ item }: { item: CorrectionItemType | CorrectionDetail }) {
 	return (

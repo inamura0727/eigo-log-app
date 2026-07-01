@@ -14,27 +14,30 @@ model Profile {
   update_at     DateTime        @default(now()) @updatedAt @db.Timestamptz(6)
   image         String?
   writing_entry writing_entry[]
+  correction_run CorrectionRun[]
 
   @@map("profile")
 }
 
 model CorrectionRun {
   id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  entry_id       String           @db.Uuid
+  entry_id       String           @db.Uuid @unique
+  user_id       String          @db.Uuid
   source_text    String
   corrected_text String
   created_at     DateTime         @default(now()) @db.Timestamptz(6)
   correctionItem CorrectionItem[]
   writingEntry   writing_entry    @relation(fields: [entry_id], references: [id], onDelete: Cascade)
+  profile       Profile         @relation(fields: [user_id], references: [id], onDelete: Cascade)
   question       Question[]
 
-  @@index([entry_id, created_at])
+  @@index([user_id, entry_id, created_at])
   @@map("correction_run")
 }
 
 model CorrectionItem {
   id                String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  correction_run_id String        @db.Uuid
+  correction_run_id String        @db.Uuid 
   category          Category
   original          String
   corrected         String

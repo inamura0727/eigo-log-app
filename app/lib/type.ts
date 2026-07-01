@@ -1,13 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
-//Loading environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
-
-//Creating a Supabase Client using supabaseUrl and supabaseAnonKey
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 // Type definition
 export type Profile = {
 	id: string;
@@ -34,12 +24,15 @@ export type CorrectionRun = {
 	source_text: string;
 	corrected_text: string;
 	created_at: string;
+	user_id: string;
 };
+
+type Category = 'grammar' | 'expression' | 'vocabulary';
 
 export type CorrectionItemType = {
 	id: string;
 	correction_run_id: string;
-	category: string;
+	category: Category;
 	original: string;
 	corrected: string;
 	explanation: string;
@@ -65,6 +58,7 @@ export type CorrectionDetail = {
 };
 
 export type CorrectionResult = {
+	entry_id: string;
 	originalText: string;
 	correctedEnglish: string;
 	betterVocabulary: CorrectionDetail[];
