@@ -1,3 +1,6 @@
+import { PostgrestError } from '@supabase/supabase-js';
+import { CefrLevel } from '../components/targetButton';
+
 // Type definition
 export type Profile = {
 	id: string;
@@ -65,4 +68,25 @@ export type CorrectionResult = {
 	usefulExpressions: CorrectionDetail[];
 	grammar: CorrectionDetail[];
 	questions: string[];
+};
+
+export type draftItem = {
+	id: string;
+	original_text: string;
+	target: CefrLevel;
+	created_at: string;
+};
+
+export type GetDraftResponse = {
+	data: draftItem[] | null;
+	error: PostgrestError | null;
+};
+
+export type GetHistoryResponse = {
+	data: CorrectionRun[] | null;
+	error: PostgrestError | null;
+};
+
+export type saveWritingEntryResponse = {
+	entry_id: string;
 };

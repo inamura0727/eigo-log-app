@@ -11,7 +11,6 @@ type SaveCorrectionResponse = {
 
 export async function POST(req: Request) {
 	const body: CorrectionResult = await req.json();
-	console.log(body);
 	const supabase = await createClient();
 
 	const {
@@ -37,7 +36,6 @@ export async function POST(req: Request) {
 				.select()
 				.single();
 			if (data) {
-				console.log(data);
 				const correction_run_id = data.id;
 
 				const correctionItems = [
@@ -84,7 +82,6 @@ export async function POST(req: Request) {
 						})),
 					);
 				if (saveCorrectionItemError) {
-					console.log(saveCorrectionItemError);
 					return Response.json(
 						{ success: false, error: saveCorrectionItemError.message },
 						{ status: 500 },
