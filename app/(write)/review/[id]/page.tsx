@@ -1,44 +1,83 @@
 import React from 'react';
+import { createClient } from '@/app/lib/supabase/server';
+import { CorrectionItemType, CorrectionRun } from '@/app/lib/type';
+import { PostgrestError } from '@supabase/supabase-js';
+import ReviewResult from '@/app/components/reviewResult';
 
-import { correctionRuns } from '../../../../data/mockData';
-import { correctionItems } from '../../../../data/mockData';
+type Params = {
+	id: string;
+};
 
-import { Text } from '@/app/constants/text';
-import CorrectionSection from '@/app/components/correctionSection';
+async function page(props: { params: Params }) {
+	const { id } = await props.params;
+	const supabase = await createClient();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
 
-const vocabSections = correctionItems.filter((item) => item.category === Text.Category.VOCABURALY);
+	if (!user) {
+		return Response.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+	} else {
+		const {
+			data: correctionRun,
+			error,
+		}: { data: CorrectionRun | null; error: PostgrestError | null } = await supabase
+			.from('correction_run')
+			.select('*')
+			.eq('id', id)
+			.maybeSingle();
 
-const usefulPhrasesSections = correctionItems.filter(
-	(item) => item.category === Text.Category.EXPRESSION,
-);
+		if (error) {
+			return Response.json({ success: false, error: error.message }, { status: 500 });
+		}
+		console.log(correctionRun);
 
-const grammarSection = correctionItems.filter((item) => item.category === Text.Category.GARMMAR);
+		const { data: correctionItem }: { data: CorrectionItemType[] | null } = await supabase
+			.from('correction_item')
+			.select('*')
+			.eq('correction_run_id', id);
 
-function page() {
-	return (
-		<div>
-			review詳細ページです
-			<div className="text-4xl font-bold mb-3">Review your Sentences</div>
-			<div className="w-full h-100 rounded-[20px] p-3 border border-[#c6c6c6] flex">
-				<div className="p-4 flex-1">
-					<p className="text-2xl text-red-500 font-bold mb-1">Origina sentence</p>
-					<p>{correctionRuns[0].source_text}</p>
-				</div>
-				<div className="p-4 flex-1 border-l border-[#c6c6c6]">
-					<p className="text-2xl text-[#009DFF] font-bold mb-1">Correct version</p>
-					<p>{correctionRuns[0].corrected_text}</p>
-				</div>
-			</div>
-			<div>
-				<CorrectionSection title={Text.Category.VOCABURALY} result={vocabSections} />
-				<CorrectionSection
-					title={Text.Category.EXPRESSION}
-					result={usefulPhrasesSections}
-				/>
-				<CorrectionSection title={Text.Category.GARMMAR} result={grammarSection} />
-			</div>
-		</div>
-	);
+		if (correctionItem) {
+			const betterVocabulary = correctionItem
+				.filter((item) => item.category === 'vocabulary')
+				.map((item) => ({
+					original: item.original,
+					corrected: item.corrected,
+					explanation: item.explanation,
+				}));
+			const usefulExpressions = correctionItem
+				.filter((item) => item.category === 'expression')
+				.map((item) => ({
+					original: item.original,
+					corrected: item.corrected,
+					explanation: item.explanation,
+				}));
+			const grammar = correctionItem
+				.filter((item) => item.category === 'grammar')
+				.map((item) => ({
+					original: item.original,
+					corrected: item.corrected,
+					explanation: item.explanation,
+				}));
+			console.log(betterVocabulary);
+
+			if (correctionRun) {
+				const reviewResultProps = {
+					original_text: correctionRun.source_text,
+					corrected_text: correctionRun.corrected_text,
+					betterVocabulary: betterVocabulary,
+					usefulExpressions: usefulExpressions,
+					grammar: grammar,
+				};
+
+				return (
+					<div>
+						<ReviewResult {...reviewResultProps} />
+					</div>
+				);
+			}
+		}
+	}
 }
 
 export default page;
