@@ -3,19 +3,19 @@ import { createClient } from '../lib/supabase/server';
 import { GetDraftResponse } from '../lib/type';
 import Link from 'next/link';
 
+export const formatDate = (dateString: string) => {
+	return new Date(dateString).toLocaleDateString('ja-JP', {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+	});
+};
+
 export default async function WritingEntrylist() {
 	const supabase = await createClient();
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
-
-	const formatDate = (dateString: string) => {
-		return new Date(dateString).toLocaleDateString('ja-JP', {
-			year: 'numeric',
-			month: '2-digit',
-			day: '2-digit',
-		});
-	};
 
 	if (!user) {
 		return <p>User is not authorized</p>;

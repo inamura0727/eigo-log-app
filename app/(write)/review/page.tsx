@@ -1,10 +1,8 @@
 'use client';
 import React, { useState } from 'react';
-import { Text } from '@/app/constants/text';
-import CorrectionSection from '@/app/components/correctionSection';
 import { CorrectionResult } from '@/app/lib/type';
-import Button from '@/app/components/button';
 import axios from 'axios';
+import ReviewResult from '@/app/components/reviewResult';
 
 function ReviewPage() {
 	const [result] = useState<CorrectionResult>(() => {
@@ -47,35 +45,16 @@ function ReviewPage() {
 		}
 	};
 
-	return (
-		<div>
-			review詳細ページです
-			<div className="text-4xl font-bold mb-3">Review your Sentences</div>
-			<div className="w-full h-100 rounded-[20px] p-3 border border-[#c6c6c6] flex">
-				<div className="p-4 flex-1">
-					<p className="text-2xl text-red-500 font-bold mb-1">Origina sentence</p>
-					<p>{originalText}</p>
-				</div>
-				<div className="p-4 flex-1 border-l border-[#c6c6c6]">
-					<p className="text-2xl text-[#009DFF] font-bold mb-1">Correct version</p>
-					<p>{correctedEnglish}</p>
-				</div>
-			</div>
-			<div>
-				<CorrectionSection title={Text.Category.VOCABURALY} result={betterVocabulary} />
-				<CorrectionSection title={Text.Category.EXPRESSION} result={usefulExpressions} />
-				<CorrectionSection title={Text.Category.GARMMAR} result={grammar} />
-			</div>
-			<div className="flex justify-end">
-				<Button
-					colour="#fff"
-					textColour="#3c3c3c"
-					text="Save Review"
-					onClick={handleSaveReview}
-				/>
-			</div>
-		</div>
-	);
+	const reviewResultPorps = {
+		original_text: originalText,
+		corrected_text: correctedEnglish,
+		betterVocabulary: betterVocabulary,
+		usefulExpressions: usefulExpressions,
+		grammar: grammar,
+		handleSaveReview: handleSaveReview,
+	};
+
+	return <ReviewResult {...reviewResultPorps} />;
 }
 
 export default ReviewPage;

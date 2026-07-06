@@ -25,8 +25,6 @@ function WritingForm({ draftData }: { draftData?: draftItem }) {
 			target: targetLevel,
 		});
 
-		console.log(res);
-
 		if (res.data.id) {
 			setWritingEntryId(res.data.id);
 		}

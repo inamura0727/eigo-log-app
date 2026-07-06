@@ -1,6 +1,8 @@
 import React from 'react';
 import { createClient } from '../lib/supabase/server';
 import { GetHistoryResponse } from '../lib/type';
+import { formatDate } from './writingEntrylist';
+import Link from 'next/link';
 
 export default async function HistoryList() {
 	const supabase = await createClient();
@@ -24,10 +26,20 @@ export default async function HistoryList() {
 					<p>History</p>
 					<ul>
 						{correctionRun.map((item) => (
-							<li key={item.id}>{item.corrected_text}</li>
+							<li key={item.id} className="border-b pb-4 pt-4 border-[#c6c6c6]">
+								<p className="line-clamp-2 mb-2"> {item.corrected_text}</p>
+								<p className="line-clamp-2 mb-2">{item.source_text}</p>
+								<p>{formatDate(item.created_at)}</p>
+								<div className="flex justify-end">
+									<Link href={`/review/${item.id}`}>
+										<button className="border border-[#3C7DFF] text-[#0080FF] rounded-[5px] px-5">
+											View
+										</button>
+									</Link>
+								</div>
+							</li>
 						))}
 					</ul>
-					<p>表示できたよ</p>
 				</div>
 			);
 		} else if (error) {

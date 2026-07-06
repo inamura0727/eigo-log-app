@@ -90,3 +90,12 @@ export type GetHistoryResponse = {
 export type saveWritingEntryResponse = {
 	entry_id: string;
 };
+
+export type ReviewResultProps = {
+	original_text: string;
+	corrected_text: string;
+	betterVocabulary: CorrectionDetail[];
+	usefulExpressions: CorrectionDetail[];
+	grammar: CorrectionDetail[];
+	handleSaveReview?: () => Promise<void>;
+};
