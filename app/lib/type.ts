@@ -97,5 +97,6 @@ export type ReviewResultProps = {
 	betterVocabulary: CorrectionDetail[];
 	usefulExpressions: CorrectionDetail[];
 	grammar: CorrectionDetail[];
+	questions: string[];
 	handleSaveReview?: () => Promise<void>;
 };
