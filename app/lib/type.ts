@@ -43,8 +43,8 @@ export type CorrectionItemType = {
 };
 
 export type Question = {
-	id: string;
-	correction_run_id: string;
+	id?: string;
+	correction_run_id?: string;
 	question_text: string;
 	created_at?: string;
 };
@@ -68,6 +68,7 @@ export type CorrectionResult = {
 	usefulExpressions: CorrectionDetail[];
 	grammar: CorrectionDetail[];
 	questions: string[];
+	target: boolean;
 };
 
 export type draftItem = {
@@ -97,5 +98,6 @@ export type ReviewResultProps = {
 	betterVocabulary: CorrectionDetail[];
 	usefulExpressions: CorrectionDetail[];
 	grammar: CorrectionDetail[];
+	questions: Question[];
 	handleSaveReview?: () => Promise<void>;
 };

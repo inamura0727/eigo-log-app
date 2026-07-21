@@ -23,6 +23,7 @@ function WritingForm({ draftData }: { draftData?: draftItem }) {
 			id: writingEntryId,
 			original_text: inputText,
 			target: targetLevel,
+			status: false,
 		});
 
 		if (res.data.id) {
@@ -41,9 +42,6 @@ function WritingForm({ draftData }: { draftData?: draftItem }) {
 
 	const handlePostOpenai = async () => {
 		try {
-			const saveEntry = await saveWritingEntry();
-			if (!saveEntry) return;
-
 			const res = await fetch('/api/write/openai', {
 				method: 'POST',
 				headers: {
@@ -61,7 +59,7 @@ function WritingForm({ draftData }: { draftData?: draftItem }) {
 
 			const data = await res.json();
 
-			const reviewData = { ...data, entry_id: saveEntry.entry_id };
+			const reviewData = { ...data, target: targetLevel };
 			sessionStorage.setItem('correctionResult', JSON.stringify(reviewData));
 
 			router.push('/review/');

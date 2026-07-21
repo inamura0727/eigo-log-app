@@ -87,6 +87,20 @@ export async function POST(req: Request) {
 						{ status: 500 },
 					);
 				}
+				const questions = body.questions;
+				await supabase.from('question').delete().eq('correction_run_id', correction_run_id);
+				const { error: saveQuestions } = await supabase.from('question').insert(
+					questions.map((item) => ({
+						correction_run_id: correction_run_id,
+						question_text: item,
+					})),
+				);
+				if (saveQuestions) {
+					return Response.json(
+						{ success: false, error: saveQuestions.message },
+						{ status: 500 },
+					);
+				}
 			}
 
 			if (error) {
