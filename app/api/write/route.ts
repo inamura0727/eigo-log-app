@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 	if (!user) {
 		return Response.json({ success: false, message: 'Unauthorized' }, { status: 401 });
 	}
-	const { id, original_text, target } = body;
+	const { id, original_text, target, status } = body;
 	try {
 		if (user) {
 			if (id) {
@@ -44,11 +44,13 @@ export async function POST(req: Request) {
 					.update({
 						original_text: original_text,
 						target: target,
+						status: status,
 					})
 					.eq('id', id)
 					.eq('user_id', user.id);
 
 				if (error) {
+					console.log(error);
 					return Response.json({ success: false, error: error.message }, { status: 500 });
 				}
 				return Response.json({ id: id, success: true, message: 'update success' });
@@ -59,11 +61,13 @@ export async function POST(req: Request) {
 						user_id: user.id,
 						original_text: original_text,
 						target: target,
+						status: status,
 					})
 					.select()
 					.single();
 
 				if (error) {
+					console.log(error);
 					return Response.json({ success: false, error: error.message }, { status: 500 });
 				}
 

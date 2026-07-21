@@ -68,6 +68,7 @@ export type CorrectionResult = {
 	usefulExpressions: CorrectionDetail[];
 	grammar: CorrectionDetail[];
 	questions: string[];
+	target: boolean;
 };
 
 export type draftItem = {

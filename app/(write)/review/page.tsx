@@ -15,7 +15,7 @@ function ReviewPage() {
 		const parsedSavedResult = JSON.parse(savedResult);
 		const CorrectionData = JSON.parse(parsedSavedResult.result);
 
-		return { ...CorrectionData, entry_id: parsedSavedResult.entry_id };
+		return { ...CorrectionData, target: parsedSavedResult.target };
 	});
 
 	if (!result) {
@@ -28,11 +28,20 @@ function ReviewPage() {
 	const usefulExpressions = result.usefulExpressions;
 	const grammar = result.grammar;
 	const questions = result.questions;
+	const target = result.target;
 
 	const handleSaveReview = async () => {
 		try {
+			const saveWritingEntry = await axios.post('api/write', {
+				id: result.entry_id,
+				original_text: originalText,
+				target: target,
+				status: true,
+			});
+			const entry_id = saveWritingEntry.data.id;
+
 			const res = await axios.post('api/review', {
-				entry_id: result.entry_id,
+				entry_id: entry_id,
 				originalText: originalText,
 				correctedEnglish: correctedEnglish,
 				betterVocabulary: betterVocabulary,

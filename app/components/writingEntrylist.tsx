@@ -24,6 +24,7 @@ export default async function WritingEntrylist() {
 			.from('writing_entry')
 			.select('id, original_text, target, created_at')
 			.eq('user_id', user.id)
+			.eq('status', false)
 			.order('created_at', { ascending: false })
 			.limit(3);
 
