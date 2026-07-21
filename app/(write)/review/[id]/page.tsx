@@ -30,7 +30,6 @@ async function page(props: { params: Params }) {
 		if (error) {
 			return Response.json({ success: false, error: error.message }, { status: 500 });
 		}
-		console.log(correctionRun);
 
 		const { data: correctionItem }: { data: CorrectionItemType[] | null } = await supabase
 			.from('correction_item')
@@ -59,7 +58,18 @@ async function page(props: { params: Params }) {
 					corrected: item.corrected,
 					explanation: item.explanation,
 				}));
-			console.log(betterVocabulary);
+
+			const { data: questions, error: questionError } = await supabase
+				.from('question')
+				.select('*')
+				.eq('correction_run_id', id);
+
+			if (questionError) {
+				return Response.json(
+					{ success: false, error: questionError.message },
+					{ status: 500 },
+				);
+			}
 
 			if (correctionRun) {
 				const reviewResultProps = {
@@ -68,6 +78,7 @@ async function page(props: { params: Params }) {
 					betterVocabulary: betterVocabulary,
 					usefulExpressions: usefulExpressions,
 					grammar: grammar,
+					questions: questions,
 				};
 
 				return (

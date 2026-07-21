@@ -19,7 +19,7 @@ function ReviewPage() {
 	});
 
 	if (!result) {
-		return <p>結果がありません。</p>;
+		return <p>No Result</p>;
 	}
 
 	const originalText = result.originalText;
@@ -44,6 +44,9 @@ function ReviewPage() {
 			console.error(error);
 		}
 	};
+	const questionList = questions.map((item) => ({
+		question_text: item,
+	}));
 
 	const reviewResultPorps = {
 		original_text: originalText,
@@ -51,6 +54,7 @@ function ReviewPage() {
 		betterVocabulary: betterVocabulary,
 		usefulExpressions: usefulExpressions,
 		grammar: grammar,
+		questions: questionList,
 		handleSaveReview: handleSaveReview,
 	};
 

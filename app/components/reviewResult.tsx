@@ -6,11 +6,10 @@ import { ReviewResultProps } from '../lib/type';
 import QuestionList from './questionList';
 
 function ReviewResult(result: ReviewResultProps) {
-	// console.log(result);
 	return (
 		<div>
 			<div className="text-4xl font-bold mb-3">Review your Sentences</div>
-			<div className="w-full h-100 rounded-[20px] p-3 border border-[#c6c6c6] flex">
+			<div className="w-full h-full rounded-[20px] p-3 border border-[#c6c6c6] flex">
 				<div className="p-4 flex-1">
 					<p className="text-2xl text-red-500 font-bold mb-1">Origina sentence</p>
 					<p>{result.original_text}</p>
