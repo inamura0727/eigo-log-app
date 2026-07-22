@@ -4,8 +4,11 @@ import Button from './button';
 import { Text } from '@/app/constants/text';
 import { ReviewResultProps } from '../lib/type';
 import QuestionList from './questionList';
+import { diffWordsWithSpace } from 'diff';
 
 function ReviewResult(result: ReviewResultProps) {
+	const diffs = diffWordsWithSpace(result.original_text, result.corrected_text);
+
 	return (
 		<div>
 			<div className="text-4xl font-bold mb-3">Review your Sentences</div>
@@ -16,7 +19,30 @@ function ReviewResult(result: ReviewResultProps) {
 				</div>
 				<div className="p-4 flex-1 border-l border-[#c6c6c6]">
 					<p className="text-2xl text-[#009DFF] font-bold mb-1">Correct version</p>
-					<p>{result.corrected_text}</p>
+					{diffs.map((part, index) => {
+						if (part.added) {
+							return (
+								<span
+									key={index}
+									className="rounded bg-green-100 px-0.5 text-green-800"
+								>
+									{part.value}
+								</span>
+							);
+						}
+						if (part.removed) {
+							return (
+								<span
+									key={index}
+									className="rounded bg-red-100 px-0.5 text-red-700 line-through"
+								>
+									{part.value}
+								</span>
+							);
+						}
+
+						return <span key={index}>{part.value}</span>;
+					})}
 				</div>
 			</div>
 			<div>
