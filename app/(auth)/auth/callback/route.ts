@@ -37,7 +37,7 @@ export async function GET(request: Request) {
 							username: username,
 						});
 						if (insertError) {
-							console.error(`error* ${insertError}`);
+							console.error(`error:` + insertError.message);
 						}
 					}
 				}
