@@ -7,6 +7,7 @@ import QuestionList from './questionList';
 import { diffWordsWithSpace } from 'diff';
 
 function ReviewResult(result: ReviewResultProps) {
+	// difference between original text and corrected text
 	const diffs = diffWordsWithSpace(result.original_text, result.corrected_text);
 
 	return (

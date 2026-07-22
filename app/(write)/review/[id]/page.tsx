@@ -36,6 +36,7 @@ async function page(props: { params: Params }) {
 			.select('*')
 			.eq('correction_run_id', id);
 
+		// Organize correction items by categoty
 		if (correctionItem) {
 			const betterVocabulary = correctionItem
 				.filter((item) => item.category === 'vocabulary')

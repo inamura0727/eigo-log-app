@@ -38,6 +38,7 @@ export async function POST(req: Request) {
 			if (data) {
 				const correction_run_id = data.id;
 
+				// Organize correction items by category to insert data
 				const correctionItems = [
 					...body.betterVocabulary.map((item, index) => ({
 						correction_run_id: correction_run_id,
@@ -65,10 +66,12 @@ export async function POST(req: Request) {
 					})),
 				];
 
+				// Remove duplicate data before insertion
 				await supabase
 					.from('correction_item')
 					.delete()
 					.eq('correction_run_id', correctionItems[0].correction_run_id);
+				// Insert data
 				const { error: saveCorrectionItemError } = await supabase
 					.from('correction_item')
 					.insert(

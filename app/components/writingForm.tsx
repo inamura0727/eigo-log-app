@@ -59,7 +59,9 @@ function WritingForm({ draftData }: { draftData?: draftItem }) {
 
 			const data = await res.json();
 
+			// add target level to OpenAI response.
 			const reviewData = { ...data, target: targetLevel };
+			// Save the OpenAI response in session storage.
 			sessionStorage.setItem('correctionResult', JSON.stringify(reviewData));
 
 			router.push('/review/');

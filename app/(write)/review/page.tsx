@@ -5,6 +5,7 @@ import axios from 'axios';
 import ReviewResult from '@/app/components/reviewResult';
 
 function ReviewPage() {
+	// Initialize the state from the data in session storage
 	const [result] = useState<CorrectionResult>(() => {
 		const savedResult = sessionStorage.getItem('correctionResult');
 
@@ -12,6 +13,7 @@ function ReviewPage() {
 			return null;
 		}
 
+		// Parse the data from session storage to use
 		const parsedSavedResult = JSON.parse(savedResult);
 		const CorrectionData = JSON.parse(parsedSavedResult.result);
 

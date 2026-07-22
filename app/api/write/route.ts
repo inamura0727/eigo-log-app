@@ -38,6 +38,7 @@ export async function POST(req: Request) {
 	const { id, original_text, target, status } = body;
 	try {
 		if (user) {
+			// If an ID exists, exsiting data UPDATE
 			if (id) {
 				const { error } = await supabase
 					.from('writing_entry')
@@ -54,6 +55,7 @@ export async function POST(req: Request) {
 					return Response.json({ success: false, error: error.message }, { status: 500 });
 				}
 				return Response.json({ id: id, success: true, message: 'update success' });
+				// If an ID doesn't exist, INSERT a new record
 			} else {
 				const { data, error } = await supabase
 					.from('writing_entry')
@@ -71,6 +73,7 @@ export async function POST(req: Request) {
 					return Response.json({ success: false, error: error.message }, { status: 500 });
 				}
 
+				// Writing entry ID is required to save a correction run.
 				return Response.json({ id: data.id, success: true, message: 'insert success' });
 			}
 		}
