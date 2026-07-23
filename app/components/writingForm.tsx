@@ -6,6 +6,7 @@ import Button from './button';
 import TextInput from './textInput';
 import { draftItem, saveWritingEntryResponse } from '../lib/type';
 import { useRouter } from 'next/navigation';
+import AttachmentUpload from './attachmentUpload';
 
 function WritingForm({ draftData }: { draftData?: draftItem }) {
 	const [inputText, setInputText] = useState<string>(draftData?.original_text ?? '');
@@ -81,6 +82,9 @@ function WritingForm({ draftData }: { draftData?: draftItem }) {
 			</div>
 			<div>
 				<TextInput value={inputText} onChange={setInputText} />
+			</div>
+			<div>
+				<AttachmentUpload />
 			</div>
 			<div className="flex items-center justify-between">
 				<Button
