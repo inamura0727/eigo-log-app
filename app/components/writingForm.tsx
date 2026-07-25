@@ -84,7 +84,7 @@ function WritingForm({ draftData }: { draftData?: draftItem }) {
 				<TextInput value={inputText} onChange={setInputText} />
 			</div>
 			<div>
-				<AttachmentUpload />
+				<AttachmentUpload setInput={setInputText} />
 			</div>
 			<div className="flex items-center justify-between">
 				<Button

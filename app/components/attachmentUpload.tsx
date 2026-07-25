@@ -1,6 +1,10 @@
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react';
 
-function AttachmentUpload() {
+type Props = {
+	setInput: Dispatch<SetStateAction<string>>;
+};
+
+function AttachmentUpload({ setInput }: Props) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [file, setFile] = useState<File | null>(null);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -23,6 +27,14 @@ function AttachmentUpload() {
 			event.target.value = '';
 			return;
 		}
+
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			const text = reader.result as string;
+			setInput(text);
+		};
+
+		reader.readAsText(selectedFile);
 
 		setFile(selectedFile);
 		setErrorMessage('');
@@ -67,6 +79,7 @@ function AttachmentUpload() {
 							if (inputRef.current) {
 								inputRef.current.value = '';
 							}
+							setInput('');
 						}}
 						className="text-sm text-red-600"
 					>
